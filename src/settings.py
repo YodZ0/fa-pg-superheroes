@@ -12,6 +12,10 @@ class RunConfig(BaseModel):
     port: int = 8000
 
 
+class APIConfig(BaseModel):
+    prefix: str = "/api"
+
+
 class DatabaseConfig(BaseModel):
     host: str
     port: int
@@ -37,9 +41,11 @@ class Settings(BaseSettings):
         env_file=(BASE_DIR / ".env"),
         extra="ignore",
     )
-
     base_dir: Path = BASE_DIR
+    debug: bool
+    cors_origins: list[str] = ["*"]
     run: RunConfig = RunConfig()
+    api: APIConfig = APIConfig()
     db: DatabaseConfig
     sh_api: SuperHeroApiConfig
 
