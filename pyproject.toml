@@ -1,0 +1,13 @@
+[tool.poetry]
+package-mode = false
+
+[project]
+name = "fa-pg-superheroes"
+version = "0.1.0"
+description = ""
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "pydantic>=2.11.7",
+    "pydantic-settings>=2.10.1",
+]
