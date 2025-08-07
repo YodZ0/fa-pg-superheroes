@@ -8,7 +8,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent  # fa-pg-superheroes
 
 
 class RunConfig(BaseModel):
-    host: str = "localhost"
+    host: str = "127.0.0.1"
     port: int = 8000
 
 
