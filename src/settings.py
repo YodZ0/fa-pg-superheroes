@@ -43,7 +43,7 @@ class Settings(BaseSettings):
     )
     base_dir: Path = BASE_DIR
     debug: bool
-    cors_origins: list[str] = ["*"]
+    cors_origins: list[str]
     run: RunConfig = RunConfig()
     api: APIConfig = APIConfig()
     db: DatabaseConfig
