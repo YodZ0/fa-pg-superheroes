@@ -1,6 +1,10 @@
 import logging
+from typing import List
 
 from fastapi import APIRouter
+
+from .schemas.superheroes import SuperheroReadSchema
+from .depends import CreateSuperheroUseCase, ListSuperheroesUseCase
 
 __all__ = ("router",)
 
@@ -13,9 +17,13 @@ router = APIRouter(
 
 
 @router.post("/hero")
-async def add_hero(name: str):
+async def add_hero(
+    superhero_name: str,
+    uc: CreateSuperheroUseCase,
+) -> SuperheroReadSchema:
     """Add hero by name"""
-    return {}
+    result = await uc.execute(superhero_name=superhero_name)
+    return result
 
 
 @router.get("/hero")
