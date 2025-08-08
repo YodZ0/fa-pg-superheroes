@@ -1,11 +1,15 @@
 import logging
-from typing import Protocol, Optional
+from typing import Protocol, Optional, List
 
 from src.core.exceptions.db_exceptions import ModelAlreadyExistsException
 
 from ..repositories.superheroes import SuperheroesRepositoryProtocol
-from ..schemas.superheroes import SuperheroReadSchema, SuperheroCreateSchema
-from ..exceptions import DBHeroNotFoundException
+from ..schemas.superheroes import (
+    SuperheroReadSchema,
+    SuperheroCreateSchema,
+    SuperheroQueryFilterSchema,
+)
+from ..exceptions import DBHeroNotFoundException, DBFilteredHeroesNotFoundException
 
 logger = logging.getLogger(__name__)
 
@@ -26,6 +30,15 @@ class SuperheroesServiceProtocol(Protocol):
     ) -> Optional[SuperheroReadSchema]:
         """
         Find hero in DB by name. Return None if not found.
+        """
+        ...
+
+    async def filter_heroes(
+        self,
+        filters: SuperheroQueryFilterSchema,
+    ) -> List[SuperheroReadSchema] | None:
+        """
+        Filter heroes with passed filters.
         """
         ...
 
@@ -64,5 +77,27 @@ class SuperheroesServiceImpl:
             logger.warning(
                 "Unable to find superhero with name %r in Database.",
                 name,
+            )
+            return None
+
+    async def filter_heroes(
+        self,
+        filters: SuperheroQueryFilterSchema,
+    ) -> List[SuperheroReadSchema] | None:
+        """
+        Filter heroes with passed filters.
+        """
+        try:
+            superheroes = await self.repository.filter_all(filters)
+            logger.debug(
+                "Filtered (%r) Superheroes: %r",
+                filters.model_dump(exclude_none=True),
+                superheroes,
+            )
+            return superheroes
+        except DBFilteredHeroesNotFoundException:
+            logger.warning(
+                "Unable to find superheroes with filters %r in Database.",
+                filters.model_dump(exclude_none=True),
             )
             return None
