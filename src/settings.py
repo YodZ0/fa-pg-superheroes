@@ -30,7 +30,12 @@ class DatabaseConfig(BaseModel):
 
 
 class SuperHeroApiConfig(BaseModel):
+    api_url: str = "https://superheroapi.com/api"
     access_token: str
+
+    @property
+    def url(self) -> str:
+        return f"{self.api_url}/{self.access_token}"
 
 
 class Settings(BaseSettings):
