@@ -48,7 +48,7 @@ SuperheroesService = Annotated[
     SuperheroesServiceProtocol,
     Depends(get_superheroes_service),
 ]
-SuperHeroAPI = Annotated[
+SuperHeroAPIService = Annotated[
     SuperHeroApiServiceProtocol,
     Depends(get_sh_api_service),
 ]
@@ -57,7 +57,7 @@ SuperHeroAPI = Annotated[
 # ======= USE CASES =======
 def get_superheroes_create_use_case(
     superheroes_service: SuperheroesService,
-    superhero_api_service: SuperHeroAPI,
+    superhero_api_service: SuperHeroAPIService,
 ) -> CreateSuperheroUseCaseProtocol:
     return CreateSuperheroUseCaseImpl(
         superheroes_service=superheroes_service,
