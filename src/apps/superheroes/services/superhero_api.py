@@ -1,5 +1,5 @@
 import logging
-from typing import Protocol, Optional
+from typing import Protocol, Optional, Dict, Any
 
 from aiohttp.client import ClientSession
 
@@ -8,6 +8,27 @@ from src.settings import settings
 from ..schemas.superheroes import SuperheroCreateSchema
 
 logger = logging.getLogger(__name__)
+
+
+def parse_api_raw_data(raw_data: Dict[str, Any]) -> SuperheroCreateSchema:
+    def _int(value: Any) -> int:
+        try:
+            return int(value) if str(value).lower() != "null" else 0
+        except (ValueError, TypeError):
+            return 0
+
+    name = raw_data.get("name")
+    powerstats = raw_data.get("powerstats", {})
+
+    return SuperheroCreateSchema(
+        name=name,
+        intelligence=_int(powerstats.get("intelligence")),
+        strength=_int(powerstats.get("strength")),
+        speed=_int(powerstats.get("speed")),
+        durability=_int(powerstats.get("durability")),
+        power=_int(powerstats.get("power")),
+        combat=_int(powerstats.get("combat")),
+    )
 
 
 class SuperHeroApiServiceProtocol(Protocol):
@@ -40,14 +61,6 @@ class SuperHeroApiServiceImpl:
 
         if result["response"] == "success":
             raw_data = result["results"][0]
-            superhero = SuperheroCreateSchema(
-                name=raw_data["name"],
-                intelligence=int(raw_data["powerstats"]["intelligence"]),
-                strength=int(raw_data["powerstats"]["strength"]),
-                speed=int(raw_data["powerstats"]["speed"]),
-                durability=int(raw_data["powerstats"]["durability"]),
-                power=int(raw_data["powerstats"]["power"]),
-                combat=int(raw_data["powerstats"]["combat"]),
-            )
-            logger.debug("Superhero was found: %r", superhero)
+            logger.debug("SuperHero API was found: %r", raw_data)
+            superhero = parse_api_raw_data(raw_data)
             return superhero
