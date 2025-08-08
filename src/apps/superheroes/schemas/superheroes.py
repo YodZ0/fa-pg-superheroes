@@ -3,11 +3,24 @@ from src.core.schemas.db_schemas import CreateBaseModel, UpdateBaseModel
 
 
 class SuperheroReadSchema(ResponseSchema):
-    pass
+    id: int
+    name: str
+    intelligence: int
+    strength: int
+    speed: int
+    durability: int
+    power: int
+    combat: int
 
 
 class SuperheroCreateSchema(CreateBaseModel):
-    pass
+    name: str
+    intelligence: int
+    strength: int
+    speed: int
+    durability: int
+    power: int
+    combat: int
 
 
 class SuperheroUpdateSchema(UpdateBaseModel):
