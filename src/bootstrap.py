@@ -3,6 +3,8 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 
+from src.core.database.db_provider import db_provider
+
 from src.settings import settings
 from src.middleware import apply_middleware
 from src.router import apply_routes
@@ -18,6 +20,7 @@ async def lifespan(app: FastAPI):
     logger.info("Start application")
     yield
     logger.info("Dispose application")
+    await db_provider.dispose()
 
 
 def create_app() -> FastAPI:
