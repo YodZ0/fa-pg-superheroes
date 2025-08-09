@@ -21,7 +21,7 @@ class ListSuperheroesUseCaseImpl:
         filters: SuperheroQueryFilterSchema,
     ) -> List[SuperheroReadSchema]:
         if filters.name:
-            superhero = await self.superheroes_service.find_hero_by_name(filters.name)
+            superhero = await self.superheroes_service.find_hero_by_name(name=filters.name)
             if superhero is None:
                 raise HeroNotFoundException(hero_name=filters.name)
             return [superhero]

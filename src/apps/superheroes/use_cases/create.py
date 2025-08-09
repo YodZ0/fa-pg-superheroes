@@ -37,11 +37,11 @@ class CreateSuperheroUseCaseImpl:
             return db_superhero
 
         # Send request to get superhero by name
-        response = await self.superhero_api_service.get_hero_by_name(superhero_name)
+        response = await self.superhero_api_service.get_hero_by_name(name=superhero_name)
         if not response:
             raise HeroNotFoundException(hero_name=superhero_name)
 
         # Save new superhero in DB
-        new_superhero = await self.superheroes_service.create_hero(response)
+        new_superhero = await self.superheroes_service.create_hero(new_hero=response)
 
         return new_superhero
