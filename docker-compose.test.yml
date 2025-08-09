@@ -4,7 +4,7 @@ services:
   test_app:
     build:
       context: .
-      dockerfile: multi-stage.Dockerfile
+      dockerfile: Dockerfile
       target: test
     ports:
       - "8001:8000"
