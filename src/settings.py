@@ -8,8 +8,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent  # fa-pg-superheroes
 
 
 class RunConfig(BaseModel):
-    host: str = "localhost"
+    host: str = "127.0.0.1"
     port: int = 8000
+
+
+class APIConfig(BaseModel):
+    prefix: str = "/api"
 
 
 class DatabaseConfig(BaseModel):
@@ -26,7 +30,12 @@ class DatabaseConfig(BaseModel):
 
 
 class SuperHeroApiConfig(BaseModel):
+    api_url: str = "https://superheroapi.com/api"
     access_token: str
+
+    @property
+    def url(self) -> str:
+        return f"{self.api_url}/{self.access_token}"
 
 
 class Settings(BaseSettings):
@@ -37,9 +46,11 @@ class Settings(BaseSettings):
         env_file=(BASE_DIR / ".env"),
         extra="ignore",
     )
-
     base_dir: Path = BASE_DIR
+    debug: bool
+    cors_origins: list[str]
     run: RunConfig = RunConfig()
+    api: APIConfig = APIConfig()
     db: DatabaseConfig
     sh_api: SuperHeroApiConfig
 

@@ -8,6 +8,26 @@ description = ""
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
+    "aiohttp>=3.12.15",
+    "alembic>=1.16.4",
+    "asyncpg>=0.30.0",
+    "fastapi[standard]>=0.116.1",
     "pydantic>=2.11.7",
     "pydantic-settings>=2.10.1",
+    "sqlalchemy>=2.0.42",
+]
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.4.1"
+pytest-asyncio = "^1.1.0"
+pytest-cov = "^6.2.1"
+aioresponses = "^0.7.8"
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+addopts = "-vvv"
+asyncio_mode = "auto"
+testpaths = "tests"
+filterwarnings = [
+    "ignore::DeprecationWarning"
 ]
