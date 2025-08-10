@@ -18,21 +18,7 @@ class FakeModel:
     pass
 
 
-batman = SuperheroReadSchema(
-    id=1,
-    name="Batman",
-    intelligence=100,
-    strength=85,
-    speed=65,
-    durability=85,
-    power=80,
-    combat=90,
-)
-
-
 class TestSuperheroesServiceImpl:
-    """Тесты сервиса работы с героями."""
-
     @pytest.fixture
     def repo(self) -> AsyncMock:
         return AsyncMock()
@@ -47,7 +33,6 @@ class TestSuperheroesServiceImpl:
         service: SuperheroesServiceImpl,
         repo: AsyncMock,
     ):
-        """Успешное создание героя."""
         schema = SuperheroCreateSchema(
             name="Batman",
             intelligence=100,
@@ -57,7 +42,16 @@ class TestSuperheroesServiceImpl:
             power=80,
             combat=90,
         )
-        repo_return = batman
+        repo_return = SuperheroReadSchema(
+            id=1,
+            name="Batman",
+            intelligence=100,
+            strength=85,
+            speed=65,
+            durability=85,
+            power=80,
+            combat=90,
+        )
         repo.create.return_value = repo_return
 
         result = await service.create_hero(schema)
@@ -71,7 +65,6 @@ class TestSuperheroesServiceImpl:
         service: SuperheroesServiceImpl,
         repo: AsyncMock,
     ):
-        """Попытка создать дубликат → ModelAlreadyExistsException."""
         schema = SuperheroCreateSchema(
             name="Batman",
             intelligence=100,
@@ -94,8 +87,16 @@ class TestSuperheroesServiceImpl:
         service: SuperheroesServiceImpl,
         repo: AsyncMock,
     ):
-        """Герой найден."""
-        repo_return = batman
+        repo_return = SuperheroReadSchema(
+            id=1,
+            name="Batman",
+            intelligence=100,
+            strength=85,
+            speed=65,
+            durability=85,
+            power=80,
+            combat=90,
+        )
         repo.get_by_name.return_value = repo_return
 
         result = await service.find_hero_by_name("Batman")
@@ -109,7 +110,6 @@ class TestSuperheroesServiceImpl:
         service: SuperheroesServiceImpl,
         repo: AsyncMock,
     ):
-        """Герой не найден → None."""
         repo.get_by_name.side_effect = DBHeroNotFoundException(FakeModel, "Unknown")
 
         result = await service.find_hero_by_name("Unknown")
@@ -123,7 +123,6 @@ class TestSuperheroesServiceImpl:
         service: SuperheroesServiceImpl,
         repo: AsyncMock,
     ):
-        """Фильтрация вернула список."""
         filters = SuperheroQueryFilterSchema(
             name=None,
             intelligence=None,
@@ -146,7 +145,16 @@ class TestSuperheroesServiceImpl:
             combat_le=None,
         )
         repo_return = [
-            batman,
+            SuperheroReadSchema(
+                id=1,
+                name="Batman",
+                intelligence=100,
+                strength=85,
+                speed=65,
+                durability=85,
+                power=80,
+                combat=90,
+            ),
             SuperheroReadSchema(
                 id=2,
                 name="Superman",
@@ -171,7 +179,6 @@ class TestSuperheroesServiceImpl:
         service: SuperheroesServiceImpl,
         repo: AsyncMock,
     ):
-        """Фильтрация ничего не нашла → None."""
         filters = SuperheroQueryFilterSchema(
             name=None,
             intelligence=None,

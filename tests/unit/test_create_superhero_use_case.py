@@ -10,8 +10,6 @@ from src.apps.superheroes.exceptions import HeroNotFoundException
 
 
 class TestCreateSuperheroUseCaseImpl:
-    """Тесты сценария создания героя."""
-
     @pytest.fixture
     def superheroes_service(self) -> AsyncMock:
         return AsyncMock()
